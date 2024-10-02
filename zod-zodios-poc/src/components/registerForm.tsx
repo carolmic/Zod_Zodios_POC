@@ -79,7 +79,7 @@ export default function RegisterForm() {
 
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full justify-center items-center">
-      <h1 className="flex justify-center">REGISTER HERE</h1>
+      <h1 className="flex justify-center font-bold text-3xl pb-2">Register</h1>
 			<div className="flex gap-4 justify-center">
         <Input 
           placeholder="Name"
@@ -123,7 +123,7 @@ export default function RegisterForm() {
 					errors.find((error: any) => error.path.includes("confirmPassword"))
 						?.message}
 			</div>
-			<button type="submit">Submit</button>
+			<button type="submit" className="bg-purple text-black p-1 pl-4 pr-4 rounded-3xl hover:bg-darkerPurple hover:text-white">Register</button>
 		</form>
 	);
 }
