@@ -1,3 +1,4 @@
+//eslind-disble
 import { Zodios, makeApi } from "@zodios/core";
 import { useState } from "react";
 import { z } from "zod";
