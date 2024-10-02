@@ -2,6 +2,7 @@ import { Zodios, makeApi } from "@zodios/core";
 import { useState } from "react";
 import { z } from "zod";
 import Input from "./input";
+import User from "./user";
 
 const schema = z
 	.object({
@@ -56,6 +57,7 @@ export default function RegisterForm() {
 		confirmPassword: "",
 	});
 	const [errors, setErrors] = useState<any>(null);
+	const [user, setUser] = useState<any>(null);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -65,6 +67,7 @@ export default function RegisterForm() {
 			const response = await apiClient.post("/register", validatedData);
 			console.log("Validated data:", validatedData);
 			console.log("User registered:", response.user);
+			setUser(response.user);
 			setErrors(null);
 		} catch (error) {
 			// If the error is a ZodError, we can get the errors from it
@@ -78,21 +81,24 @@ export default function RegisterForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full justify-center items-center">
-      <h1 className="flex justify-center font-bold text-3xl pb-2">Register</h1>
+		<form
+			onSubmit={handleSubmit}
+			className="flex flex-col gap-8 w-full justify-center items-center"
+		>
+			<h1 className="flex justify-center font-bold text-3xl pb-2">Register</h1>
 			<div className="flex gap-4 justify-center">
-        <Input 
-          placeholder="Name"
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
+				<Input
+					placeholder="Name"
+					type="text"
+					value={formData.name}
+					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+				/>
 				{errors &&
 					errors.find((error: any) => error.path.includes("name"))?.message}
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
-          placeholder="Email"
+					placeholder="Email"
 					type="email"
 					value={formData.email}
 					onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -102,7 +108,7 @@ export default function RegisterForm() {
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
-          placeholder="Password"
+					placeholder="Password"
 					type="password"
 					value={formData.password}
 					onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -112,7 +118,7 @@ export default function RegisterForm() {
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
-          placeholder="Confirm Password"
+					placeholder="Confirm Password"
 					type="password"
 					value={formData.confirmPassword}
 					onChange={(e) =>
@@ -123,7 +129,18 @@ export default function RegisterForm() {
 					errors.find((error: any) => error.path.includes("confirmPassword"))
 						?.message}
 			</div>
-			<button type="submit" className="bg-purple text-black p-1 pl-4 pr-4 rounded-3xl hover:bg-darkerPurple hover:text-white">Register</button>
+			<button
+				type="submit"
+				className="bg-purple text-black p-1 pl-4 pr-4 rounded-3xl hover:bg-darkerPurple hover:text-white"
+			>
+				Register
+			</button>
+			{user && (
+				<div className="flex flex-col items-center gap-2">
+					<h1 className="font-bold">Profile:</h1>
+					<User name={user.name} email={user.email} />
+				</div>
+			)}
 		</form>
 	);
 }
