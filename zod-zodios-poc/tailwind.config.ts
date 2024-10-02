@@ -7,6 +7,13 @@ const config: Config = {
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
+		colors: {
+			standard: '#ededed',
+			transparent: 'transparent',
+			white: '#FFFFFF',
+			purple: '#BB86FC',
+			purpleDark: '#3700B3',
+		},
 		extend: {},
 	},
 	plugins: [],

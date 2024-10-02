@@ -1,6 +1,7 @@
 import { Zodios, makeApi } from "@zodios/core";
 import { useState } from "react";
 import { z } from "zod";
+import Input from "./input";
 
 const schema = z
 	.object({
@@ -77,20 +78,21 @@ export default function RegisterForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="w-full bg-red-500">
-			<div>
-				<label>Name: </label>
-				<input
-					type="text"
-					value={formData.name}
-					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-				/>
+		<form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full justify-center items-center">
+      <h1 className="flex justify-center">REGISTER HERE</h1>
+			<div className="flex gap-4 justify-center">
+        <Input 
+          placeholder="Name"
+          type="text"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
 				{errors &&
 					errors.find((error: any) => error.path.includes("name"))?.message}
 			</div>
-			<div>
-				<label>Email: </label>
-				<input
+			<div className="flex gap-4 justify-center">
+				<Input
+          placeholder="Email"
 					type="email"
 					value={formData.email}
 					onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -98,9 +100,9 @@ export default function RegisterForm() {
 				{errors &&
 					errors.find((error: any) => error.path.includes("email"))?.message}
 			</div>
-			<div>
-				<label>Password: </label>
-				<input
+			<div className="flex gap-4 justify-center">
+				<Input
+          placeholder="Password"
 					type="password"
 					value={formData.password}
 					onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -108,9 +110,9 @@ export default function RegisterForm() {
 				{errors &&
 					errors.find((error: any) => error.path.includes("password"))?.message}
 			</div>
-			<div>
-				<label>Confirm password: </label>
-				<input
+			<div className="flex gap-4 justify-center">
+				<Input
+          placeholder="Confirm Password"
 					type="password"
 					value={formData.confirmPassword}
 					onChange={(e) =>
