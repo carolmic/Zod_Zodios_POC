@@ -1,3 +1,4 @@
+import { Zodios, makeApi } from '@zodios/core';
 import { useState } from 'react';
 import { z } from 'zod';
 
@@ -11,6 +12,31 @@ const schema = z.object({
   // This is the path to the field that will be highlighted
   path: ['confirmPassword'],
 })
+
+const apiSchema = makeApi([
+  {
+    method: 'post',
+    path: '/register',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'name', type: 'Body',
+        schema: schema
+      },
+    ],
+    response: z.object({
+      message: z.string(),
+      user: z.object({
+        id: z.number(),
+        name: z.string(),
+        email: z.string(),
+      })
+    })
+  }
+])
+
+const apiClient = new Zodios('/api', apiSchema);
+
 export default function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState<any>(null);
@@ -20,13 +46,17 @@ export default function Home() {
     try {
       // This will throw an error if the data is invalid
       const validatedData = schema.parse(formData);
+      const response = await apiClient.post('/register', validatedData);
       console.log('Validated data:', validatedData);
+      console.log('User registered:', response.user);
       setErrors(null);
     } catch (error) {
       // If the error is a ZodError, we can get the errors from it
       if (error instanceof z.ZodError) {
         console.log('Error:', error);
         setErrors(error.errors);
+      } else {
+        console.error('An unexpected error occurred:', error);
       }
     }
   };
