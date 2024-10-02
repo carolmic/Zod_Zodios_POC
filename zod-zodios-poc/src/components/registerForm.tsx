@@ -1,7 +1,6 @@
-//eslint-disable
-import { Zodios, makeApi } from "@zodios/core";
+import { makeApi, Zodios } from "@zodios/core";
 import { useState } from "react";
-import { z } from "zod";
+import { z, ZodIssue } from "zod";
 import Input from "./input";
 import User from "./user";
 
@@ -50,6 +49,8 @@ const apiSchema = makeApi([
 
 const apiClient = new Zodios("/api", apiSchema);
 
+type user = { name: string; email: string; id: number; };
+
 export default function RegisterForm() {
 	const [formData, setFormData] = useState({
 		name: "",
@@ -57,10 +58,10 @@ export default function RegisterForm() {
 		password: "",
 		confirmPassword: "",
 	});
-	const [errors, setErrors] = useState<any>(null);
-	const [user, setUser] = useState<any>(null);
+	const [errors, setErrors] = useState<ZodIssue[]>();
+	const [user, setUser] = useState<user>();
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			// This will throw an error if the data is invalid
@@ -69,7 +70,7 @@ export default function RegisterForm() {
 			console.log("Validated data:", validatedData);
 			console.log("User registered:", response.user);
 			setUser(response.user);
-			setErrors(null);
+			setErrors([]);
 		} catch (error) {
 			// If the error is a ZodError, we can get the errors from it
 			if (error instanceof z.ZodError) {
@@ -95,7 +96,7 @@ export default function RegisterForm() {
 					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
 				/>
 				{errors &&
-					errors.find((error: any) => error.path.includes("name"))?.message}
+					errors.find((error: ZodIssue) => error.path.includes("name"))?.message}
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
@@ -105,7 +106,7 @@ export default function RegisterForm() {
 					onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 				/>
 				{errors &&
-					errors.find((error: any) => error.path.includes("email"))?.message}
+					errors.find((error: ZodIssue) => error.path.includes("email"))?.message}
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
@@ -115,7 +116,7 @@ export default function RegisterForm() {
 					onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 				/>
 				{errors &&
-					errors.find((error: any) => error.path.includes("password"))?.message}
+					errors.find((error: ZodIssue) => error.path.includes("password"))?.message}
 			</div>
 			<div className="flex gap-4 justify-center">
 				<Input
@@ -127,7 +128,7 @@ export default function RegisterForm() {
 					}
 				/>
 				{errors &&
-					errors.find((error: any) => error.path.includes("confirmPassword"))
+					errors.find((error: ZodIssue) => error.path.includes("confirmPassword"))
 						?.message}
 			</div>
 			<button
