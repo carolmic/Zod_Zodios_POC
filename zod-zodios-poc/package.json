@@ -12,7 +12,7 @@
     "@tanstack/react-query": "^4.36.1",
     "@zodios/core": "^10.9.6",
     "@zodios/react": "^10.4.5",
-    "axios": "^0.28.1",
+    "axios": "^1.7.7",
     "next": "14.2.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
